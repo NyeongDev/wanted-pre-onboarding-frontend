@@ -1,7 +1,28 @@
 import styled, { css } from "styled-components";
 
 const AuthBtn = ({ children, ...props }) => {
-  return <ButtonSt {...props}>{children}</ButtonSt>;
+  switch (props.isBtnAvailable) {
+    case "always":
+      return (
+        <ButtonSt variant={props.isBtnAvailable} {...props}>
+          {children}
+        </ButtonSt>
+      );
+    case "available":
+      return (
+        <ButtonSt variant={props.isBtnAvailable} {...props}>
+          {children}
+        </ButtonSt>
+      );
+    case "unavailable":
+      return (
+        <ButtonSt disabled variant={props.isBtnAvailable} {...props}>
+          {children}
+        </ButtonSt>
+      );
+    default:
+      break;
+  }
 };
 
 const ButtonSt = styled.button`
@@ -13,14 +34,21 @@ const ButtonSt = styled.button`
 
   ${({ variant }) => {
     switch (variant) {
-      case "abled":
+      case "always":
+        return css`
+          border: 1px solid #c7c7c7;
+          color: black;
+          font-weight: 300;
+          cursor: pointer;
+        `;
+      case "available":
         return css`
           background-color: black;
           :hover {
             cursor: pointer;
           }
         `;
-      case "disabled":
+      case "unavailable":
         return css`
           background-color: #c7c7c7;
         `;

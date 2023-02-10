@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const H1 = ({ children, ...props }) => {
   return <H1St {...props}>{children}</H1St>;
@@ -15,5 +15,23 @@ const H1St = styled.h1`
 
 const SpanSt = styled.span`
   font-size: 14px;
-  color: #ff4d4d;
+
+  ${({ variant }) => {
+    switch (variant) {
+      case true:
+        return css`
+          color: transparent;
+        `;
+      case null:
+        return css`
+          color: transparent;
+        `;
+      case false:
+        return css`
+          color: #ff4d4d;
+        `;
+      default:
+        break;
+    }
+  }}
 `;
