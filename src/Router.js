@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import TodoPage from "./pages/TodoPage";
 import AuthPage from "./pages/AuthPage";
-import { Layout } from "./components/common";
+import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <HomePage />,
     children: [
       {
         path: "/todo",
