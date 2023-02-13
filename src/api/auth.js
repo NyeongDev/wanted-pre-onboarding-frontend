@@ -14,10 +14,7 @@ export const signUpApi = async formContent => {
 export const signInApi = async formContent => {
   try {
     const response = await axios.post(`${API_URL}/auth/signin`, formContent);
-    return (
-      window.localStorage.setItem("accessToken", response.data.access_token),
-      response.status
-    );
+    return response;
   } catch (err) {
     return err.response.status;
   }

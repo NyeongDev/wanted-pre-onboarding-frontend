@@ -32,6 +32,7 @@ const Auth = () => {
         pageTitle: "회원가입",
         btnName: ["취소", "가입하기"],
         inputGuide: ["email@email.com", "8자 이상 입력하세요"],
+        btnId: "signup-button",
       });
       setMovePath("signin");
     } else if (matchSignIn) {
@@ -39,10 +40,11 @@ const Auth = () => {
         pageTitle: "로그인",
         btnName: ["회원가입", "로그인"],
         inputGuide: ["email@email.com", ""],
+        btnId: "signin-button",
       });
       setMovePath("signup");
     }
-  }, []);
+  }, [matchSignIn, matchSignUp]);
 
   // 양식 저장
   const handleFormContent = e => {
@@ -74,6 +76,8 @@ const Auth = () => {
   // 양식 제출
   const handleSubmit = async e => {
     e.preventDefault();
+
+    // 회원가입
     if (matchSignUp) {
       const response = await signUpApi(formContent);
       switch (response) {
@@ -86,17 +90,19 @@ const Auth = () => {
         default:
           return window.alert("알 수 없는 에러가 발생했습니다.");
       }
+
+      // 로그인
     } else if (matchSignIn) {
       const response = await signInApi(formContent);
-      switch (response) {
-        case 200:
-          return navigate("/todo");
-        case 401:
-          return window.alert("이메일 또는 비밀번호가 일치하지 않습니다.");
-        case 404:
-          return window.alert("존재하지 않는 사용자입니다.");
-        default:
-          return window.alert("알 수 없는 에러가 발생했습니다.");
+      if (response.status === 200) {
+        window.localStorage.setItem("accessToken", response.data.access_token);
+        window.location.replace("/todo");
+      } else if (response.status === 401) {
+        return window.alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+      } else if (response.status === 404) {
+        return window.alert("존재하지 않는 사용자입니다.");
+      } else {
+        return window.alert("알 수 없는 에러가 발생했습니다.");
       }
     }
   };
@@ -112,7 +118,7 @@ const Auth = () => {
               <Label htmlFor="email">이메일</Label>
               <Flex dir="column" wd="100%" ai="flex-start" gap="5px">
                 <AuthInput
-                  data-testid="email-Authinput"
+                  data-testid="email-input"
                   type="email"
                   id="email"
                   name="email"
@@ -134,7 +140,7 @@ const Auth = () => {
               <Label htmlFor="password">비밀번호</Label>
               <Flex dir="column" wd="100%" ai="flex-start" gap="5px">
                 <AuthInput
-                  data-testid="password-Authinput"
+                  data-testid="password-input"
                   type="password"
                   id="password"
                   name="password"
@@ -163,7 +169,7 @@ const Auth = () => {
           </AuthBtn>
           <AuthBtn
             isBtnAvailable={isBtnAvailable}
-            data-testid="signin-button"
+            data-testid={authUi.btnId}
             onClick={handleSubmit}
           >
             {authUi.btnName[1]}
