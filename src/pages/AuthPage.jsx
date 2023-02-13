@@ -6,6 +6,7 @@ import { useNavigate, useMatch } from "react-router-dom";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("accessToken");
   const matchSignUp = useMatch("/signup");
   const matchSignIn = useMatch("/signin");
   const [isEmailValid, setIsEmailValid] = useState(null);
@@ -18,6 +19,11 @@ const Auth = () => {
     btnName: [],
     inputGuide: [],
   });
+
+  // 로그인 여부에 따른 리다이렉트
+  useEffect(() => {
+    token && navigate("/todo");
+  }, [token]);
 
   // UI 변경
   useEffect(() => {

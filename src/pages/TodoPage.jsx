@@ -1,7 +1,17 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Flex, Form, H1, Label, List } from "../components/common";
 import { TodoBtn, TodoCheckBox, TodoInput } from "../components/todo";
 
 const Todo = () => {
+  const token = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
+
+  // 로그인 여부에 따른 리다이렉트
+  useEffect(() => {
+    !token && navigate("/signin");
+  }, [token]);
+
   return (
     <Flex dir="column" gap="37px" ht="100%" wd="100%">
       <H1>TODO</H1>
