@@ -11,12 +11,12 @@ const CheckSt = styled.div`
 
   ${({ variant }) => {
     switch (variant) {
-      case "checkTodo":
+      case false:
         return css`
           border: 1px solid #c7c7c7;
           border-radius: 25px;
         `;
-      case "checkedTodo":
+      case true:
         return css`
           background-size: contain;
           background-image: url("/images/checked-icon.svg");

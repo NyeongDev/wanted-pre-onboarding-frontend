@@ -1,16 +1,52 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Flex, Form, H1, Label, List } from "../components/common";
-import { TodoBtn, TodoCheckBox, TodoInput } from "../components/todo";
+import { addTodoApi, getTodosApi } from "../api/todo";
+import { Flex, Form, H1 } from "../components/common";
+import { TodoBtn, TodoInput, TodoItem } from "../components/todo";
 
-const Todo = () => {
+const TodoPage = () => {
   const token = localStorage.getItem("accessToken");
   const navigate = useNavigate();
+  const [todoList, setTodoList] = useState([]);
+  const [todoContent, setTodoContent] = useState("");
+  const [updateTodoContent, setUpdateTodoContent] = useState("");
 
-  // 로그인 여부에 따른 리다이렉트
   useEffect(() => {
-    !token && navigate("/signin");
+    token ? requestGetTodos() : navigate("/signin");
   }, [token]);
+
+  // 투두 조회
+  const requestGetTodos = async () => {
+    const response = await getTodosApi();
+    if (response.status === 200) {
+      const initialTodoList = response.data.map(todoItem => {
+        return { ...todoItem, isUpdateStatus: false };
+      });
+      setTodoList(initialTodoList);
+    } else return window.alert("알 수 없는 에러가 발생했습니다.");
+  };
+
+  // 투두 작성
+  const handleOnChangeTodo = (e, isUpdateStatus) => {
+    if (isUpdateStatus) {
+      setUpdateTodoContent(e.target.value);
+    } else {
+      setTodoContent(e.target.value);
+    }
+  };
+
+  // 투두 저장
+  const handleAddTodo = async e => {
+    e.preventDefault();
+    if (todoContent.length > 0) {
+      const response = await addTodoApi(todoContent);
+      if (response.status === 201) {
+        const newTodo = { ...response.data, isUpdateStatus: false };
+        setTodoList([...todoList, newTodo]);
+        setTodoContent("");
+      } else return window.alert("알 수 없는 에러가 발생했습니다.");
+    }
+  };
 
   return (
     <Flex dir="column" gap="37px" ht="100%" wd="100%">
@@ -20,11 +56,17 @@ const Todo = () => {
       <Form wd="100%">
         <Flex>
           <TodoInput
+            onChange={e => handleOnChangeTodo(e)}
             data-testid="new-todo-input"
             maxLength="48"
             variant="addTodo"
+            value={todoContent || ""}
           />
-          <TodoBtn data-testid="new-todo-add-button" variant="addTodo">
+          <TodoBtn
+            onClick={handleAddTodo}
+            data-testid="new-todo-add-button"
+            variant="addTodo"
+          >
             추가
           </TodoBtn>
         </Flex>
@@ -39,20 +81,20 @@ const Todo = () => {
         jc="flex-start"
         overflowY="auto"
       >
-        <Flex wd="100%" gap="15px">
-          <TodoInput variant="checkTodo" id="checkTodo" type="checkbox" />
-          <Label htmlFor="checkTodo" variant="checkedTodo">
-            <TodoCheckBox variant="checkedTodo" />
-          </Label>
-          <List>화이팅</List>
-          <Flex gap="2px">
-            <TodoBtn variant="modTodo">수정</TodoBtn>
-            <TodoBtn variant="modTodo">삭제</TodoBtn>
-          </Flex>
-        </Flex>
+        {todoList.map(todo => (
+          <TodoItem
+            key={todo.id}
+            setTodoList={setTodoList}
+            todoList={todoList}
+            todo={todo}
+            handleOnChangeTodo={handleOnChangeTodo}
+            updateTodoContent={updateTodoContent}
+            setUpdateTodoContent={setUpdateTodoContent}
+          />
+        ))}
       </Flex>
     </Flex>
   );
 };
 
-export default Todo;
+export default TodoPage;
