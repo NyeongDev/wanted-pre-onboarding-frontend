@@ -97,9 +97,9 @@ const Auth = () => {
       if (response.status === 200) {
         window.localStorage.setItem("accessToken", response.data.access_token);
         window.location.replace("/todo");
-      } else if (response.status === 401) {
+      } else if (response === 401) {
         return window.alert("이메일 또는 비밀번호가 일치하지 않습니다.");
-      } else if (response.status === 404) {
+      } else if (response === 404) {
         return window.alert("존재하지 않는 사용자입니다.");
       } else {
         return window.alert("알 수 없는 에러가 발생했습니다.");
