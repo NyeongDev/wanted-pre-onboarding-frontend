@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { signInApi, signUpApi } from "../api/auth";
 import { useNavigate, useMatch } from "react-router-dom";
 
-const Auth = () => {
+const AuthPage = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
   const matchSignUp = useMatch("/signup");
@@ -19,11 +19,6 @@ const Auth = () => {
     btnName: [],
     inputGuide: [],
   });
-
-  // 로그인 여부에 따른 리다이렉트
-  useEffect(() => {
-    token && navigate("/todo");
-  }, [token]);
 
   // UI 변경
   useEffect(() => {
@@ -180,4 +175,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default AuthPage;
