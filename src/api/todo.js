@@ -5,13 +5,9 @@ const token = localStorage.getItem("accessToken");
 
 export const addTodoApi = async todoContent => {
   try {
-    const response = await axios.post(
-      `${API_URL}/todos`,
-      { todo: todoContent },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const response = await axios.post(`${API_URL}/todos`, todoContent, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return response;
   } catch (err) {
     return err.response.status;
@@ -44,7 +40,7 @@ export const updateTodoApi = async todoItem => {
   try {
     const response = await axios.put(
       `${API_URL}/todos/${todoItem.id}`,
-      { todo: todoItem.todo, isCompleted: todoItem.isCompleted },
+      todoItem.todo,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
