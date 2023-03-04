@@ -6,7 +6,6 @@ import { useNavigate, useMatch } from 'react-router-dom';
 
 const AuthPage = () => {
 	const navigate = useNavigate();
-	const token = localStorage.getItem('accessToken');
 	const matchSignUp = useMatch('/signup');
 	const matchSignIn = useMatch('/signin');
 	const [isEmailValid, setIsEmailValid] = useState(null);
