@@ -75,7 +75,7 @@ const AuthPage = () => {
     // 회원가입
     if (matchSignUp) {
       const response = await signUpApi(formContent);
-      switch (response) {
+      switch (response.status) {
         case 201:
           return (
             window.alert("회원가입이 완료되었습니다."), navigate("/signin")

@@ -1,52 +1,10 @@
-import axios from "axios";
+import { instance } from "./instance";
 
-const API_URL = process.env.REACT_APP_SERVER_URL;
-const token = localStorage.getItem("accessToken");
+export const addTodoApi = todoContent => instance.post(`/todos`, todoContent);
 
-export const addTodoApi = async todoContent => {
-  try {
-    const response = await axios.post(`${API_URL}/todos`, todoContent, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response;
-  } catch (err) {
-    return err.response.status;
-  }
-};
+export const getTodosApi = () => instance.get(`/todos`);
 
-export const getTodosApi = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/todos`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response;
-  } catch (err) {
-    return err.response.status;
-  }
-};
+export const delTodoApi = todoId => instance.delete(`/todos/${todoId}`);
 
-export const delTodoApi = async todoId => {
-  try {
-    const response = await axios.delete(`${API_URL}/todos/${todoId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.status;
-  } catch (err) {
-    return err.response.status;
-  }
-};
-
-export const updateTodoApi = async todoItem => {
-  try {
-    const response = await axios.put(
-      `${API_URL}/todos/${todoItem.id}`,
-      todoItem.todo,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    return response;
-  } catch (err) {
-    return err.response.status;
-  }
-};
+export const updateTodoApi = todoItem =>
+  instance.put(`/todos/${todoItem.id}`, todoItem.todo);

@@ -40,7 +40,7 @@ const TodoItem = ({ todoItem }) => {
   const handleDeleteTodo = async () => {
     if (!window.confirm("삭제하시겠습니까?")) return;
     const response = await delTodoApi(todoItem.id);
-    if (response === 204) {
+    if (response.status === 204) {
       dispatch({ type: "DELETE", id: todoItem.id });
     } else window.alert("알 수 없는 에러가 발생했습니다.");
   };
