@@ -16,7 +16,7 @@ module.exports = {
 	rules: {
 		'no-var': 'error',
 		'no-multiple-empty-lines': 'warn',
-		'no-console': 'warn',
+		'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
 		'no-shadow': 'warn',
 		'dot-notation': 'warn',
 		'no-unused-vars': 'error',
